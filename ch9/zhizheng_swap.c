@@ -1,18 +1,19 @@
 #include <stdio.h>
 void swap(int *x, int *y);
+int main()
+{
+    int a, b;
+    printf("输入两个数字:\n");
+    scanf("%d%d", &a, &b);
+    swap(&a, &b);
+    printf("%d    %d",a,b);
+    return 0;
+}
 
 void swap(int *x, int *y)
 {
     int temp;
-    temp = *x; // a存入临时
-    *x = *y;   // 将临时a存入b
-    *y = temp;
-}
-int main()
-{
-    int a = 10;
-    int b = 20;
-    swap(&a, &b);
-    printf("%d,%d\n", a, b);
-    return 0;
+    temp = *x;
+    *x = *y;
+    *y= temp;
 }
