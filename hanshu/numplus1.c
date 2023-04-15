@@ -11,7 +11,6 @@ int main()
     printf("%d\n",num);//3    
     return 0;
 }
-
 void Add(int *p)
 {
     *p=*p+1;
