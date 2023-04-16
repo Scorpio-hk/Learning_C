@@ -28,5 +28,5 @@ int main()
     int k=1950;
     scanf("%d",&n);
     printf("%d",n-k+1);
-    return 0;
+    return 0;//11111
 }
