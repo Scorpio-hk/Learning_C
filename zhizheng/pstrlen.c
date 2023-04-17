@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include <string.h>
-/* int pstrlen(char *p)
+int pstrlen(char *p)
 {
     int count=0;
     while (*p != '\0')
@@ -10,13 +9,13 @@
     }
     return count;
 }
- */
+
 
 int main()
 {
     int a = 0;
     char c[20];
     scanf("%s", c); //im sb
-    a = strlen(c);
+    a = pstrlen(c);
     printf("%d", a);
 }
