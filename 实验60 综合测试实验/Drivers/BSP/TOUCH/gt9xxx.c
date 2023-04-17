@@ -198,7 +198,7 @@ uint8_t gt9xxx_scan(uint8_t mode)
                 {
                     gt9xxx_rd_reg(GT9XXX_TPX_TBL[i], buf, 4);   /* ¶ÁÈ¡XY×ø±êÖµ */
 
-                    if (lcddev.id == 0X5510)            /* 4.3´ç800*480 MCUÆÁ */
+                    if (lcddev.id == 0X5510||lcddev.id==0X6812||lcddev.id==0X8009)            /* 4.3´ç800*480 MCUÆÁ */
                     {
                         if (tp_dev.touchtype & 0X01)    /* ºáÆÁ */
                         {

@@ -124,7 +124,7 @@ uint32_t lcd_read_point(uint16_t x, uint16_t y)
 
     lcd_set_cursor(x, y);       /* 设置坐标 */
 
-    if (lcddev.id == 0X5510)
+    if (lcddev.id == 0X5510||lcddev.id==0X6812||lcddev.id==0X8009)
     {
         lcd_wr_regno(0X2E00);   /* 5510 发送读GRAM指令 */
     }
@@ -155,7 +155,7 @@ uint32_t lcd_read_point(uint16_t x, uint16_t y)
  */
 void lcd_display_on(void)
 {
-    if (lcddev.id == 0X5510)
+    if (lcddev.id == 0X5510||lcddev.id==0X6812||lcddev.id==0X8009)
     {
         lcd_wr_regno(0X2900);   /* 开启显示 */
     }
@@ -172,7 +172,7 @@ void lcd_display_on(void)
  */
 void lcd_display_off(void)
 {
-    if (lcddev.id == 0X5510)
+    if (lcddev.id == 0X5510||lcddev.id==0X6812||lcddev.id==0X8009)
     {
         lcd_wr_regno(0X2800);   /* 关闭显示 */
     }
@@ -216,7 +216,7 @@ void lcd_set_cursor(uint16_t x, uint16_t y)
         lcd_wr_data((lcddev.height - 1) & 0XFF);
 
     }
-    else if (lcddev.id == 0X5510)
+    else if (lcddev.id == 0X5510||lcddev.id==0X6812)
     {
         lcd_wr_regno(lcddev.setxcmd);
         lcd_wr_data(x >> 8);
@@ -227,6 +227,23 @@ void lcd_set_cursor(uint16_t x, uint16_t y)
         lcd_wr_regno(lcddev.setycmd + 1);
         lcd_wr_data(y & 0XFF);
     }
+    
+    
+      else if(lcddev.id==0x8009)  //OTM8009A 描点必需写起始座标
+	{      
+        lcd_wr_regno(lcddev.setxcmd+0);lcd_wr_data(x>>8); 		
+        lcd_wr_regno(lcddev.setxcmd+1);lcd_wr_data(x&0XFF);	
+
+        lcd_wr_regno(lcddev.setxcmd+2);lcd_wr_data((lcddev.width-1)>>8); 	
+        lcd_wr_regno(lcddev.setxcmd+3);lcd_wr_data((lcddev.width-1)&0XFF); 
+
+        lcd_wr_regno(lcddev.setycmd+0);lcd_wr_data(y>>8);  		
+        lcd_wr_regno(lcddev.setycmd+1);lcd_wr_data(y&0XFF);	
+        lcd_wr_regno(lcddev.setycmd+2);lcd_wr_data((lcddev.height-1)>>8); 	
+        lcd_wr_regno(lcddev.setycmd+3);lcd_wr_data((lcddev.height-1)&0XFF);	
+     
+	}     
+    
     else    /* 9341/5310/7789 等 设置坐标 */
     {
         lcd_wr_regno(lcddev.setxcmd);
@@ -237,6 +254,22 @@ void lcd_set_cursor(uint16_t x, uint16_t y)
         lcd_wr_data(y & 0XFF);
     }
 }
+
+
+void lcd_set_cursor2(uint16_t x, uint16_t y)
+{	 
+ 
+
+lcd_wr_regno(lcddev.setxcmd+0);lcd_wr_data(x>>8); 		
+lcd_wr_regno(lcddev.setxcmd+1);lcd_wr_data(x&0XFF);	
+
+
+lcd_wr_regno(lcddev.setycmd+0);lcd_wr_data(y>>8);  		
+lcd_wr_regno(lcddev.setycmd+1);lcd_wr_data(y&0XFF);	
+lcd_wr_regno(lcddev.setycmd+2);lcd_wr_data((lcddev.height-1)>>8); 	
+lcd_wr_regno(lcddev.setycmd+3);lcd_wr_data((lcddev.height-1)&0XFF);	
+
+} 	
 
 /**
  * @brief       设置LCD的自动扫描方向(对RGB屏无效)
@@ -331,7 +364,7 @@ void lcd_scan_dir(uint8_t dir)
 
     dirreg = 0X36;  /* 对绝大部分驱动IC, 由0X36寄存器控制 */
 
-    if (lcddev.id == 0X5510)
+    if (lcddev.id == 0X5510||lcddev.id==0X6812||lcddev.id==0X8009)
     {
         dirreg = 0X3600;    /* 对于5510, 和其他驱动ic的寄存器有差异 */
     }
@@ -367,7 +400,7 @@ void lcd_scan_dir(uint8_t dir)
     }
 
     /* 设置显示区域(开窗)大小 */
-    if (lcddev.id == 0X5510)
+    if (lcddev.id == 0X5510||lcddev.id==0X6812||lcddev.id==0X8009)
     {
         lcd_wr_regno(lcddev.setxcmd);
         lcd_wr_data(0);
@@ -444,7 +477,7 @@ void lcd_display_dir(uint8_t dir)
         lcddev.width = 240;
         lcddev.height = 320;
 
-        if (lcddev.id == 0x5510)
+        if (lcddev.id == 0x5510||lcddev.id==0X6812||lcddev.id==0X8009)
         {
             lcddev.wramcmd = 0X2C00;
             lcddev.setxcmd = 0X2A00;
@@ -478,7 +511,7 @@ void lcd_display_dir(uint8_t dir)
         lcddev.width = 320;         /* 默认宽度 */
         lcddev.height = 240;        /* 默认高度 */
 
-        if (lcddev.id == 0x5510)
+        if (lcddev.id == 0x5510||lcddev.id==0X6812||lcddev.id==0X8009)
         {
             lcddev.wramcmd = 0X2C00;
             lcddev.setxcmd = 0X2A00;
@@ -540,7 +573,7 @@ void lcd_set_window(uint16_t sx, uint16_t sy, uint16_t width, uint16_t height)
         lcd_wr_data(height >> 8);
         lcd_wr_data(height & 0XFF);
     }
-    else if (lcddev.id == 0X5510)
+    else if (lcddev.id == 0X5510||lcddev.id==0X6812||lcddev.id==0X8009)
     {
         lcd_wr_regno(lcddev.setxcmd);
         lcd_wr_data(sx >> 8);
@@ -709,7 +742,21 @@ void lcd_init(void)
                     lcddev.id <<= 8;
                     lcddev.id |= lcd_rd_data(); /* 读回0X61 */
 
-                    if (lcddev.id == 0X5761)lcddev.id = 0X1963; /* SSD1963读回的ID是5761H,为方便区分,我们强制设置为1963 */
+                    if (lcddev.id == 0X5761)
+                        lcddev.id = 0X1963; /* SSD1963读回的ID是5761H,为方便区分,我们强制设置为1963 */
+                    else 
+                        {
+                            lcd_wr_regno(0XDA00);	
+                            lcddev.id=lcd_rd_data();		//读回0X00	 
+                            lcd_wr_regno(0XDB00);	
+                            lcddev.id=lcd_rd_data();		//读回0X80
+                            lcddev.id<<=8;	
+                            lcd_wr_regno(0XDC00);	
+                            lcddev.id|=lcd_rd_data();		//读回0X00		
+
+                                if(lcddev.id==0x8200)lcddev.id=0x6812;//RM68120读回的ID是681211H,为方便区分,我们强制设置为6812                
+                                if(lcddev.id==0x4000)lcddev.id=0x8009;//OTM8009A读回的ID是8000H,为方便区分,我们强制设置为8009
+                        }
                 }
             }
         }
@@ -737,6 +784,18 @@ void lcd_init(void)
     {
         lcd_ex_nt35510_reginit();   /* 执行NT35510初始化 */
     }
+    
+     else if (lcddev.id == 0x8009)
+    {
+        lcd_ex_OTM8009_reginit();   /* 执行OTM8009A初始化 */
+    }
+
+    else if (lcddev.id == 0x6812)
+    {
+        lcd_ex_RM68120_reginit();   /* 执行RM68120初始化 */
+    }    
+    
+    
     else if (lcddev.id == 0X1963)
     {
         lcd_ex_ssd1963_reginit();   /* 执行SSD1963初始化 */
@@ -753,13 +812,21 @@ void lcd_init(void)
         LCD_FSMC_BWTRX |= 3 << 8;       /* 数据保存时间(DATAST)为3个HCLK = 18ns */
     }
     
-    if (lcddev.id == 0X5510 || lcddev.id == 0X5310) /* 如果是这几个IC, 则设置WR时序为最快 */
+    if (lcddev.id == 0X5510 || lcddev.id == 0X5310|| lcddev.id == 0X8009) /* 如果是这几个IC, 则设置WR时序为最快 */
     {
         /* 重新配置写时序控制寄存器的时序 */
-        LCD_FSMC_BWTRX &= ~(0XF << 0);  /* 地址建立时间(ADDSET)清零 */
+//        LCD_FSMC_BWTRX &= ~(0XF << 0);  /* 地址建立时间(ADDSET)清零 */
+//        LCD_FSMC_BWTRX &= ~(0XF << 8);  /* 数据保存时间清零 */
+//        LCD_FSMC_BWTRX |= 2 << 0;       /* 地址建立时间(ADDSET)为2个HCLK = 12ns */
+//        LCD_FSMC_BWTRX |= 2 << 8;       /* 数据保存时间(DATAST)为2个HCLK = 12ns */
+        
+        
+                LCD_FSMC_BWTRX &= ~(0XF << 0);  /* 地址建立时间(ADDSET)清零 */
         LCD_FSMC_BWTRX &= ~(0XF << 8);  /* 数据保存时间清零 */
-        LCD_FSMC_BWTRX |= 2 << 0;       /* 地址建立时间(ADDSET)为2个HCLK = 12ns */
-        LCD_FSMC_BWTRX |= 2 << 8;       /* 数据保存时间(DATAST)为2个HCLK = 12ns */
+        LCD_FSMC_BWTRX |= 8<< 0;       /* 地址建立时间(ADDSET)为2个HCLK = 12ns */
+        LCD_FSMC_BWTRX |= 8 << 8;       /* 数据保存时间(DATAST)为2个HCLK = 12ns */
+        
+        
     }
 
     lcd_display_dir(0); /* 默认为竖屏 */

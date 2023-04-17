@@ -212,6 +212,9 @@ void lcd_ssd_backlight_set(uint8_t pwm);    /* SSD1963 背光控制 */
 
 void lcd_write_ram_prepare(void);               /* 准备些GRAM */ 
 void lcd_set_cursor(uint16_t x, uint16_t y);    /* 设置光标 */ 
+
+void lcd_set_cursor2(uint16_t x, uint16_t y);    /* 设置光标 */ 
+
 uint32_t lcd_read_point(uint16_t x, uint16_t y);/* 读点(32位颜色,兼容LTDC)  */
 void lcd_draw_point(uint16_t x, uint16_t y, uint32_t color);/* 画点(32位颜色,兼容LTDC) */
 

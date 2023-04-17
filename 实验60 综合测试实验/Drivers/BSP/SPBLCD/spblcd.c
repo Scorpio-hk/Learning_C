@@ -156,11 +156,18 @@ void slcd_frame_show(uint32_t x)
 {
     lcd_scan_dir(U2D_L2R);  /* 设置扫描方向 */
 
-    if (lcddev.id == 0X9341 || lcddev.id == 0X7789 || lcddev.id == 0X5310 || lcddev.id == 0X5510)
+    if (lcddev.id == 0X9341 || lcddev.id == 0X7789 || lcddev.id == 0X5310 || lcddev.id == 0X5510||lcddev.id==0X6812)
     {
         lcd_set_window(spbdev.stabarheight, 0, spbdev.spbheight, spbdev.spbwidth);
         lcd_set_cursor(spbdev.stabarheight, 0);  /* 设置光标位置 */
     }
+     else if(lcddev.id==0X8009)
+    {
+        lcd_set_window(spbdev.stabarheight,0,spbdev.spbheight,spbdev.spbwidth);
+        lcd_set_cursor2(spbdev.stabarheight,0);//设置光标位置  8009A必需调用此光标函数，否则会异常，不知道原因
+        
+    }   
+    
     else
     {
         lcd_set_window(0, spbdev.stabarheight, spbdev.spbwidth, spbdev.spbheight);

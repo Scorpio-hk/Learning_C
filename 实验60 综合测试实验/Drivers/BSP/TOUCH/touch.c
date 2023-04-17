@@ -513,7 +513,7 @@ uint8_t tp_init(void)
     tp_dev.touchtype = 0;                   /* 默认设置(电阻屏 & 竖屏) */
     tp_dev.touchtype |= lcddev.dir & 0X01;  /* 根据LCD判定是横屏还是竖屏 */
 
-    if (lcddev.id == 0X5510 || lcddev.id == 0X4342 || lcddev.id == 0X1018)  /* 电容触摸屏,4.3寸/10.1寸屏 */
+    if (lcddev.id == 0X5510 ||lcddev.id==0X6812||lcddev.id==0X8009|| lcddev.id == 0X4342 || lcddev.id == 0X1018)  /* 电容触摸屏,4.3寸/10.1寸屏 */
     {
         gt9xxx_init();
         tp_dev.scan = gt9xxx_scan;  /* 扫描函数指向GT9147触摸屏扫描 */
